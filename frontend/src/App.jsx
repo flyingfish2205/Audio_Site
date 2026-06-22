@@ -1,16 +1,14 @@
 import { useState, useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'
 import './App.css'
 import './Header.css'
+
+import supabase from './components/services/supabase'
 import Player from './components/player/AudioPlayer'
 import Form from './components/uploads/Form'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey)
 
 
-function Header(){
+function Page(){
   const [show, setShow] = useState(false)
 
   
@@ -32,14 +30,30 @@ function Header(){
   </div>
 )
 }
-  
+
+function Footer(){
+  return(
+    <div className = "footer">
+      <p>Created by<a href="https://flyingfish.dev" target="_blank" rel="noopener noreferrer">flyingfish2205</a></p>
+      </div>
+    )
+      
+}
+function Shuffle(Array){
+  const shuffled = [...Array]
+  for(let i = shuffled.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled
+}
 
 function App() {
   const [tracks, setTracks] = useState([])
 
   async function getTracks(){
     const {data} = await supabase.from('tracks').select()
-    setTracks(data)
+    setTracks(Shuffle(data))
   }
 
   useEffect(() => {
@@ -52,15 +66,18 @@ function App() {
     <div>Tune in!</div>
     
     < Player tracks={tracks}/>
-    < Header/>
+    < Page />
     
     
-    <ul>
-      
-      {tracks.map(track => <li key={track.id}>{track.title}</li>)}
+    <div>
+      <p>Now Playing: {tracks.length > 0 ? tracks[0].title : 'No tracks available'}</p>
+      <p>By: {tracks.length > 0 ? tracks[0].artist : 'Unknown Artist'}</p>
+    </div>
+    <Footer />
 
-    </ul>
     </>
+
+    
   )
 }
 
