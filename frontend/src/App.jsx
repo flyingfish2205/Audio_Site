@@ -34,7 +34,7 @@ function Page(){
 function Footer(){
   return(
     <div className = "footer">
-      <p>Created by<a href="https://flyingfish.dev" target="_blank" rel="noopener noreferrer">flyingfish2205</a></p>
+      <p>Created by <a href="https://flyingfish.dev" target="_blank" rel="noopener noreferrer">flyingfish2205</a></p>
       </div>
     )
       
